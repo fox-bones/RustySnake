@@ -41,8 +41,10 @@ enum GameState {
 async fn main() {
     let mut game_state = GameState::StartMenu;
 
+    // Used to restrict the snake's 
     let mut move_timer = 0.0;
     let move_interval = 0.12;
+
     let mut rng = ::rand::rng();
 
     let mut player = Player::new (
@@ -73,6 +75,7 @@ async fn main() {
                     game_state = GameState::Playing;
                 }
             }
+
             // Primary game logic lives here
             GameState::Playing => {
                 if is_key_pressed(KeyCode::Escape) {
@@ -81,6 +84,7 @@ async fn main() {
                 
                 player.keyboard_movement();
 
+                // Making sure input commands are still heard regardless of frame restrictions
                 move_timer += get_frame_time();
 
                 if move_timer >= move_interval {
@@ -99,6 +103,7 @@ async fn main() {
                 }
 
             }
+
             GameState::Paused => {
                 player.draw();
                 food.draw_food();
@@ -113,6 +118,7 @@ async fn main() {
                     game_state = GameState::StartMenu;
                 }
             }
+
             GameState::Dead => {
                 player.draw();
                 food.draw_food();
